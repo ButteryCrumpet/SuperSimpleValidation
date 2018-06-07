@@ -7,13 +7,13 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use SuperSimpleValidation\ValidationException;
 
-class Filetype implements RuleInterface
+class FileType implements RuleInterface
 {
-    private $bytes;
+    private $signature;
 
-    public function construct(array $bytes)
+    public function __construct(array $signature)
     {
-        $this->bytes = $bytes;
+        $this->signature = $signature;
     }
 
     public function assert($data)
@@ -22,14 +22,18 @@ class Filetype implements RuleInterface
             throw new ValidationException(
                 sprintf(
                     "Not valid file format for byte signature %s",
-                    var_export($this->bytes, true)
+                    var_export($this->signature, true)
                 )
             );
         }
+        return true;
     }
 
     public function validate($data)
     {
+        if (!is_array($this->signature)) {
+            throw new \InvalidArgumentException("not arrays is " . gettype($this->signature));
+        }
         if ($data instanceof UploadedFileInterface) {
             return $this->handleUploadFile($data);
         }
@@ -65,7 +69,7 @@ class Filetype implements RuleInterface
             return false;
         }
         $data->rewind();
-        $sig = $data->read(count($this->bytes));
+        $sig = $data->read(count($this->signature));
         return $this->compareBytes($sig);
 
     }
@@ -78,7 +82,8 @@ class Filetype implements RuleInterface
 
     private function handleResource($data)
     {
-        $sig = fread($fp, count($this->bytes));
+        fseek($data, 0);
+        $sig = fread($data, count($this->signature));
         return $this->compareBytes($sig);
     }
 
@@ -87,7 +92,7 @@ class Filetype implements RuleInterface
         $sig = str_split($sig, 1);
         $all_pass = true;
         foreach ($sig as $i => $byte) {
-            $all_pass = $all_pass && bin2hex($byte) === $this->bytes[$i];
+            $all_pass = $all_pass && (bin2hex($byte) === $this->signature[$i]);
         }
         return $all_pass;
 
