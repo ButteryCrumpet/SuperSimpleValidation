@@ -1,29 +1,31 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use SuperSimpleValidation\Rules\Blacklist;
+use SuperSimpleValidation\Rules\Generic;
 use SuperSimpleValidation\ValidationException;
 
-class BlacklistRuleTest extends TestCase
+class GenericRuleTest extends TestCase
 {
     public function testInitializes()
     {
         $this->assertInstanceOf(
-            Blacklist::class,
-            new Blacklist(["hi", "ho"])
+            Generic::class,
+            new Generic(function ($data) { return true; })
         );
     }
 
     public function testValidatesCorrectly()
     {
-        $bl = new Blacklist(["hi", "ho"]);
+        $bl = new Generic(function ($data) {
+            return $data === "ha";
+        });
         $this->assertTrue(
             $bl->validate("ha"),
-            "True when value not in blacklist"
+            "True"
         );
         $this->assertFalse(
             $bl->validate("hi"),
-            "False when value in blacklist"
+            "False"
         );
     }
 
@@ -33,7 +35,7 @@ class BlacklistRuleTest extends TestCase
     public function testThrowsExceptionOnAssert()
     {
         $this->expectException(ValidationException::class);
-        $bl = new Blacklist(["ho"]);
+        $bl = new Generic(function ($data) { return false; });
         $bl->assert("ho");
     }
 }

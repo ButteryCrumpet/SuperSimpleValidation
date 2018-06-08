@@ -2,17 +2,19 @@
 
 namespace SuperSimpleValidation\Rules;
 
+use SuperSimpleValidation\ValidatorInterface;
 use SuperSimpleValidation\ValidationException;
 
 /**
  * Class Required
  * @package SuperSimpleValidation\Rules
  */
-class Required implements RuleInterface
+class Required implements ValidatorInterface
 {
     /**
      * @param $data
      * @throws ValidationException
+     * @return bool
      */
     public function assert($data)
     {
@@ -21,6 +23,7 @@ class Required implements RuleInterface
                 "Required value is null or empty"
             );
         }
+        return true;
     }
 
     /**

@@ -2,13 +2,14 @@
 
 namespace SuperSimpleValidation\Rules;
 
+use SuperSimpleValidation\ValidatorInterface;
 use SuperSimpleValidation\ValidationException;
 
 /**
  * Class Blacklist
  * @package SuperSimpleValidation\Rules
  */
-class Blacklist implements RuleInterface
+class Blacklist implements ValidatorInterface
 {
     /**
      * @var array
@@ -35,7 +36,6 @@ class Blacklist implements RuleInterface
             throw new ValidationException(
                 sprintf("%s is a blacklisted value", $data)
             );
-            return false;
         }
         return true;
     }

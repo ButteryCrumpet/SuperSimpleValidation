@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use SuperSimpleValidation\Rules\Regex;
+use SuperSimpleValidation\ValidationException;
 
 class RegexRuleTest extends TestCase
 {
@@ -23,5 +24,12 @@ class RegexRuleTest extends TestCase
     {
         $validator = new Regex('/^\(?\+?\d{1,4}\)?-?\d{2,4}-?\d{4}$/');
         $this->assertEquals(false, $validator->validate("080-55627260-"));
+    }
+
+    public function testThrowsExceptionOnAssert()
+    {
+        $this->expectException(ValidationException::class);
+        $bl = new Regex('/^\(?\+?\d{1,4}\)?-?\d{2,4}-?\d{4}$/');
+        $bl->assert("d");
     }
 }

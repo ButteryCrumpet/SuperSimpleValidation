@@ -2,20 +2,36 @@
 
 namespace SuperSimpleValidation\Rules;
 
-use MongoDB\Driver\Exception\InvalidArgumentException;
+use SuperSimpleValidation\ValidatorInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use SuperSimpleValidation\ValidationException;
 
-class FileType implements RuleInterface
+/**
+ * Class FileType
+ * @package SuperSimpleValidation\Rules
+ */
+class FileSignature implements ValidatorInterface
 {
+    /**
+     * @var array
+     */
     private $signature;
 
+    /**
+     * FileType constructor.
+     * @param string[] $signature Array of hex values
+     */
     public function __construct(array $signature)
     {
         $this->signature = $signature;
     }
 
+    /**
+     * @param $data
+     * @return bool
+     * @throws ValidationException When validation fails
+     */
     public function assert($data)
     {
         if (!$this->validate($data)) {
@@ -29,6 +45,10 @@ class FileType implements RuleInterface
         return true;
     }
 
+    /**
+     * @param UploadedFileInterface|StreamInterface|resource|string $data
+     * @return bool
+     */
     public function validate($data)
     {
         if (!is_array($this->signature)) {
@@ -58,11 +78,19 @@ class FileType implements RuleInterface
         );
     }
 
+    /**
+     * @param UploadedFileInterface $data
+     * @return bool
+     */
     private function handleUploadFile(UploadedFileInterface $data)
     {
         return $this->handleStream($data->getStream());
     }
 
+    /**
+     * @param StreamInterface $data
+     * @return bool
+     */
     private function handleStream(StreamInterface $data)
     {
         if (!($data->isReadable() && $data->isSeekable())) {
@@ -74,12 +102,20 @@ class FileType implements RuleInterface
 
     }
 
+    /**
+     * @param $fileUri
+     * @return bool
+     */
     private function handleString($fileUri)
     {
         $resource = fopen($fileUri, "rb");
         return $this->handleResource($resource);
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     private function handleResource($data)
     {
         fseek($data, 0);
@@ -87,6 +123,10 @@ class FileType implements RuleInterface
         return $this->compareBytes($sig);
     }
 
+    /**
+     * @param $sig
+     * @return bool
+     */
     private function compareBytes($sig)
     {
         $sig = str_split($sig, 1);

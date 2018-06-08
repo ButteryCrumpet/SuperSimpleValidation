@@ -2,13 +2,14 @@
 
 namespace SuperSimpleValidation\Rules;
 
+use SuperSimpleValidation\ValidatorInterface;
 use SuperSimpleValidation\ValidationException;
 
 /**
  * Class Email
  * @package SuperSimpleValidation\Rules
  */
-class Email implements RuleInterface
+class Email implements ValidatorInterface
 {
     /**
      * @param $data
@@ -17,11 +18,10 @@ class Email implements RuleInterface
      */
     public function assert($data)
     {
-        if (!(is_string($input) && filter_var($data, FILTER_VALIDATE_EMAIL))) {
+        if (!(is_string($data) && filter_var($data, FILTER_VALIDATE_EMAIL))) {
             throw new ValidationException(
                 sprintf("%s is not a valid Email", $data)
             );
-            return false;
         }
         return true;
     }

@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use SuperSimpleValidation\Rules\Email;
+use SuperSimpleValidation\ValidationException;
 
 class EmailRuleTest extends TestCase
 {
@@ -23,5 +24,12 @@ class EmailRuleTest extends TestCase
     {
         $v = new Email;
         $this->assertEquals(false, $v->validate("hiho"));
+    }
+
+    public function testThrowsExceptionOnAssert()
+    {
+        $this->expectException(ValidationException::class);
+        $bl = new Email(["ho"]);
+        $bl->assert("ho");
     }
 }

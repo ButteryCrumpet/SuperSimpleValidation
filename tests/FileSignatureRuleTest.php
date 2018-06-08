@@ -1,17 +1,18 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use SuperSimpleValidation\Rules\FileType;
+use SuperSimpleValidation\Rules\FileSignature;
+use SuperSimpleValidation\ValidationException;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 
-class FiletypeRuleTest extends TestCase
+class FileSignatureRuleTest extends TestCase
 {
     public function testInitializes()
     {
         $this->assertInstanceOf(
-            FileType::class,
-            new FileType(["25", "50", "44", "46"])
+            FileSignature::class,
+            new FileSignature(["25", "50", "44", "46"])
         );
     }
 
@@ -39,11 +40,18 @@ class FiletypeRuleTest extends TestCase
             ->method("getStream")
             ->willReturn($stream);
 
-        $fileTest = new FileType(["25", "50", "44", "46"]);
+        $fileTest = new FileSignature(["25", "50", "44", "46"]);
         $this->assertTrue($fileTest->validate($resource), "Validates resource");
         $this->assertTrue($fileTest->validate($stream), "Validates stream");
         $this->assertTrue($fileTest->validate($uploaded), "Validates uploaded file");
         $this->assertTrue($fileTest->validate("test.pdf"), "Validates file");
+    }
+
+    public function testThrowsExceptionOnAssert()
+    {
+        $this->expectException(ValidationException::class);
+        $bl = new FileSignature(["28", "50", "44", "46"]);
+        $bl->assert("test.pdf");
     }
 
     public function setUp()

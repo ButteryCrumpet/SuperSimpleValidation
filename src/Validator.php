@@ -2,9 +2,7 @@
 
 namespace SuperSimpleValidation;
 
-use SuperSimpleValidation\Rules\RuleInterface;
-
-class Validator
+class Validator implements ValidatorInterface
 {
     private $rules;
     private $messages;
@@ -13,7 +11,7 @@ class Validator
 
     /**
      * Validator constructor.
-     * @param RuleInterface[] $rules
+     * @param ValidatorInterface[] $rules
      * @param array $messages
      */
     public function __construct(array $rules, array $messages = [])
@@ -27,9 +25,16 @@ class Validator
         foreach ($this->rules as $name => $rule) {
             if (!$rule->validate($data)) {
                 $this->errors[] = isset($this->messages[$name])
-                    ? $this->messages[$namee]
-                    : sprintf("%s invalid for rule %s", $data, gettype($rule));
+                    ? $this->messages[$name]
+                    : sprintf("%s invalid for rule %s", $data, get_class($rule));
             }
+        }
+    }
+
+    public function assert($data)
+    {
+        foreach ($this->rules as $name => $rule) {
+            $rule->assert($data);
         }
     }
 

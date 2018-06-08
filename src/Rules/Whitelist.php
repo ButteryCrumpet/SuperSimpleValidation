@@ -2,13 +2,14 @@
 
 namespace SuperSimpleValidation\Rules;
 
+use SuperSimpleValidation\ValidatorInterface;
 use SuperSimpleValidation\ValidationException;
 
 /**
  * Class Whitelist
  * @package SuperSimpleValidation\Rules
  */
-class Whitelist implements RuleInterface
+class Whitelist implements ValidatorInterface
 {
     /**
      * @var array
@@ -35,7 +36,6 @@ class Whitelist implements RuleInterface
             throw new ValidationException(
                 sprintf("%s is not a whitelisted value", $data)
             );
-            return false;
         }
         return true;
     }

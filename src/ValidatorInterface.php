@@ -1,8 +1,8 @@
 <?php
 
-namespace SuperSimpleValidation\Rules;
+namespace SuperSimpleValidation;
 
-interface RuleInterface
+interface ValidatorInterface
 {
     public function assert($data);
 

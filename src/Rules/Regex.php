@@ -2,9 +2,10 @@
 
 namespace SuperSimpleValidation\Rules;
 
+use SuperSimpleValidation\ValidatorInterface;
 use SuperSimpleValidation\ValidationException;
 
-class Regex implements RuleInterface
+class Regex implements ValidatorInterface
 {
     /**
      * @var $regex
