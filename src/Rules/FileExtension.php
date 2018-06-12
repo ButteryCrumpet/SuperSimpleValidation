@@ -2,11 +2,11 @@
 
 namespace SuperSimpleValidation\Rules;
 
-use SuperSimpleValidation\ValidatorInterface;
+use SuperSimpleValidation\RuleInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use SuperSimpleValidation\ValidationException;
 
-class FileExtension implements ValidatorInterface
+class FileExtension implements RuleInterface
 {
     private $extension;
 

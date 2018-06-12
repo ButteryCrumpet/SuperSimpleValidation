@@ -2,9 +2,9 @@
 
 namespace SuperSimpleValidation\Logic;
 
-use SuperSimpleValidation\ValidatorInterface;
+use SuperSimpleValidation\RuleInterface;
 
-class LogicAnd implements ValidatorInterface
+class LogicAnd implements RuleInterface
 {
     private $validators;
 

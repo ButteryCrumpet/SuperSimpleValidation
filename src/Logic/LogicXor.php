@@ -3,9 +3,9 @@
 namespace SuperSimpleValidation\Logic;
 
 use SuperSimpleValidation\ValidationException;
-use SuperSimpleValidation\ValidatorInterface;
+use SuperSimpleValidation\RuleInterface;
 
-class LogicXor implements ValidatorInterface
+class LogicXor implements RuleInterface
 {
     private $validators;
 

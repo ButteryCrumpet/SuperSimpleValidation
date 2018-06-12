@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use SuperSimpleValidation\Logic\LogicXor;
-use SuperSimpleValidation\ValidatorInterface;
+use SuperSimpleValidation\RuleInterface;
 use SuperSimpleValidation\ValidationException;
 
 class LogicXorTest extends TestCase
@@ -12,12 +12,12 @@ class LogicXorTest extends TestCase
 
     public function setUp()
     {
-        $this->true = $this->createMock(ValidatorInterface::class);
+        $this->true = $this->createMock(RuleInterface::class);
         $this->true
             ->method("validate")
             ->willReturn(true);
 
-        $this->false = $this->createMock(ValidatorInterface::class);
+        $this->false = $this->createMock(RuleInterface::class);
         $this->false
             ->method("validate")
             ->willReturn(false);
@@ -57,12 +57,12 @@ class LogicXorTest extends TestCase
      */
     public function testThrowsExceptionOnAssert()
     {
-        $assertValid = $this->createMock(ValidatorInterface::class);
+        $assertValid = $this->createMock(RuleInterface::class);
         $assertValid
             ->method("assert")
             ->willReturn(true);
 
-        $assertInvalid = $this->createMock(ValidatorInterface::class);
+        $assertInvalid = $this->createMock(RuleInterface::class);
         $assertInvalid
             ->method("assert")
             ->willThrowException(new ValidationException("message"));

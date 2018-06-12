@@ -3,9 +3,9 @@
 namespace SuperSimpleValidation\Logic;
 
 use SuperSimpleValidation\ValidationException;
-use SuperSimpleValidation\ValidatorInterface;
+use SuperSimpleValidation\RuleInterface;
 
-class LogicNot implements ValidatorInterface
+class LogicNot implements RuleInterface
 {
     private $validators;
 

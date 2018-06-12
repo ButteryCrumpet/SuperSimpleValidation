@@ -2,14 +2,14 @@
 
 namespace SuperSimpleValidation\Rules;
 
-use SuperSimpleValidation\ValidatorInterface;
+use SuperSimpleValidation\RuleInterface;
 use SuperSimpleValidation\ValidationException;
 
 /**
  * Class Generic
  * @package SuperSimpleValidation\Rules
  */
-class Generic implements ValidatorInterface
+class Generic implements RuleInterface
 {
     /**
      * @var

@@ -2,14 +2,14 @@
 
 namespace SuperSimpleValidation\Rules;
 
-use SuperSimpleValidation\ValidatorInterface;
+use SuperSimpleValidation\RuleInterface;
 use SuperSimpleValidation\ValidationException;
 
 /**
  * Class Whitelist
  * @package SuperSimpleValidation\Rules
  */
-class Whitelist implements ValidatorInterface
+class Whitelist implements RuleInterface
 {
     /**
      * @var array

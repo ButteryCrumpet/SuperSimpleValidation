@@ -2,7 +2,7 @@
 
 namespace SuperSimpleValidation\Rules;
 
-use SuperSimpleValidation\ValidatorInterface;
+use SuperSimpleValidation\RuleInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use SuperSimpleValidation\ValidationException;
@@ -11,7 +11,7 @@ use SuperSimpleValidation\ValidationException;
  * Class FileType
  * @package SuperSimpleValidation\Rules
  */
-class FileSignature implements ValidatorInterface
+class FileSignature implements RuleInterface
 {
     /**
      * @var array
@@ -130,11 +130,11 @@ class FileSignature implements ValidatorInterface
     private function compareBytes($sig)
     {
         $sig = str_split($sig, 1);
-        $all_pass = true;
+        $allPass = true;
         foreach ($sig as $i => $byte) {
-            $all_pass = $all_pass && (bin2hex($byte) === $this->signature[$i]);
+            $allPass = $allPass && (bin2hex($byte) === $this->signature[$i]);
         }
-        return $all_pass;
+        return $allPass;
 
     }
 }

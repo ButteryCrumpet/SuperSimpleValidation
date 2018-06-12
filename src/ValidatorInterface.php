@@ -2,9 +2,7 @@
 
 namespace SuperSimpleValidation;
 
-interface ValidatorInterface
+interface ValidatorInterface extends RuleInterface
 {
-    public function assert($data);
-
-    public function validate($data);
+    public function getErrors();
 }
