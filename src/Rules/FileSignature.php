@@ -70,7 +70,7 @@ class FileSignature implements RuleInterface
             return $this->handleString($data);
         }
 
-        throw new InvalidArgumentException(
+        throw new \InvalidArgumentException(
             sprintf(
                 "Argument must be a valid file uri, resource, UploadFileInterface or StreamInterface. %s was given",
                 gettype($data)
