@@ -51,9 +51,6 @@ class FileSignature implements RuleInterface
      */
     public function validate($data)
     {
-        if (!is_array($this->signature)) {
-            throw new \InvalidArgumentException("not arrays is " . gettype($this->signature));
-        }
         if ($data instanceof UploadedFileInterface) {
             return $this->handleUploadFile($data);
         }
@@ -70,12 +67,7 @@ class FileSignature implements RuleInterface
             return $this->handleString($data);
         }
 
-        throw new \InvalidArgumentException(
-            sprintf(
-                "Argument must be a valid file uri, resource, UploadFileInterface or StreamInterface. %s was given",
-                gettype($data)
-            )
-        );
+        return false;
     }
 
     /**

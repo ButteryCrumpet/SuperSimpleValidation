@@ -39,7 +39,7 @@ class FileExtension implements RuleInterface
 
     public function validate($data)
     {
-        if (!$this->argCheck($data)) {
+        if (!($data instanceof UploadedFileInterface || is_string($data))) {
             return false;
         }
 
@@ -50,13 +50,4 @@ class FileExtension implements RuleInterface
         $info = new \SplFileInfo($data);
         return $info->getExtension() === $this->extension;
     }
-
-    private function argCheck($data)
-    {
-        if (!($data instanceof UploadedFileInterface || is_string($data))) {
-            return false;
-        }
-        return true;
-    }
-
 }
