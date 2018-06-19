@@ -47,6 +47,17 @@ class FileSignatureRuleTest extends TestCase
         $this->assertTrue($fileTest->validate("test.pdf"), "Validates file");
     }
 
+    public function testCorrectlyHandlesOpeningStreamException()
+    {
+        $uploaded = $this->createMock(UploadedFileInterface::class);
+        $uploaded
+            ->method("getStream")
+            ->willThrowException(new \RuntimeException());
+
+        $fileTest = new FileSignature(["25", "50", "44", "46"]);
+        $this->assertFalse($fileTest->validate($uploaded));
+    }
+
     public function testThrowsExceptionOnAssert()
     {
         $this->expectException(ValidationException::class);

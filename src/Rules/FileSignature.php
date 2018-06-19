@@ -84,7 +84,11 @@ class FileSignature implements RuleInterface
      */
     private function handleUploadFile(UploadedFileInterface $data)
     {
-        return $this->handleStream($data->getStream());
+        try {
+            return $this->handleStream($data->getStream());
+        } catch (\RuntimeException $e) {
+            return false;
+        }
     }
 
     /**
@@ -135,6 +139,5 @@ class FileSignature implements RuleInterface
             $allPass = $allPass && (bin2hex($byte) === $this->signature[$i]);
         }
         return $allPass;
-
     }
 }
