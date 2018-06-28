@@ -7,4 +7,6 @@ interface RuleInterface
     public function assert($data);
 
     public function validate($data);
+
+    public function getErrorMessages();
 }

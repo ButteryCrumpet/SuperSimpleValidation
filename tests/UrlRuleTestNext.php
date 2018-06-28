@@ -9,19 +9,19 @@ class UrlRuleTest extends TestCase
     {
         $this->assertInstanceOf(
             Url::class,
-            new Url
+            new Url("error")
         );
     }
 
     public function testValidatesCorrectly()
     {
-        $v = new Url;
+        $v = new Url("error");
         $this->assertEquals(true, $v->validate("www.hiho.com"));
     }
 
     public function testInvalidatesCorrectly()
     {
-        $v = new Url;
+        $v = new Url("error");
         $this->assertEquals(false, $v->validate("hur."));
     }
 }

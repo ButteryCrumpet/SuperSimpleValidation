@@ -10,32 +10,32 @@ class TypeRuleTest extends TestCase
     {
         $this->assertInstanceOf(
             Type::class,
-            new Type(Type::class)
+            new Type(Type::class, "error")
         );
     }
 
     public function testCorrectlyValidates()
     {
-        $validator = new Type(Type::class);
+        $validator = new Type(Type::class, "error");
         $this->assertTrue($validator->validate($validator), "Validates classes");
-        $validator = new Type("string");
+        $validator = new Type("string", "error");
         $this->assertTrue($validator->validate("hi"), "Validates string");
-        $validator = new Type("array");
+        $validator = new Type("array", "error");
         $this->assertTrue($validator->validate(["hi"]), "Validates arrays");
-        $validator = new Type("integer");
+        $validator = new Type("integer", "error");
         $this->assertTrue($validator->validate(4));
     }
 
     public function testCorrectlyInvalidates()
     {
-        $validator = new Type("string");
+        $validator = new Type("string", "error");
         $this->assertEquals(false, $validator->validate($validator));
     }
 
     public function testThrowsExceptionOnAssert()
     {
         $this->expectException(ValidationException::class);
-        $bl = new Type(Type::class);
+        $bl = new Type(Type::class, "error");
         $bl->assert("ho");
     }
 }

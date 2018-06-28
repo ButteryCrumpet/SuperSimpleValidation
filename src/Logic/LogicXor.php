@@ -7,19 +7,25 @@ use SuperSimpleValidation\RuleInterface;
 
 class LogicXor implements RuleInterface
 {
+    /**
+     * @var RuleInterface[]
+     */
     private $validators;
+    /**
+     * @var string
+     */
+    private $errorMessages;
 
-    public function __construct(array $validators)
+    public function __construct(array $validators, $errorMessage)
     {
         $this->validators = $validators;
+        $this->errorMessages[0] = $errorMessage;
     }
 
     public function assert($data)
     {
         if (!$this->validate($data)) {
-            throw new ValidationException(
-                "Validation failed"
-            );
+            throw new ValidationException($this->errorMessages[0]);
         }
         return true;
     }
@@ -31,5 +37,10 @@ class LogicXor implements RuleInterface
             $pass = $pass ^ $validator->validate($data);
         }
         return (bool)$pass;
+    }
+
+    public function getErrorMessages()
+    {
+        return $this->errorMessages;
     }
 }

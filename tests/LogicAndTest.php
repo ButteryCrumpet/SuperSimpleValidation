@@ -16,30 +16,36 @@ class LogicAndTest extends TestCase
         $this->true
             ->method("validate")
             ->willReturn(true);
+        $this->true
+            ->method("getErrorMessages")
+            ->willReturn(["error"]);
 
         $this->false = $this->createMock(RuleInterface::class);
         $this->false
             ->method("validate")
             ->willReturn(false);
+        $this->false
+            ->method("getErrorMessages")
+            ->willReturn(["error"]);
     }
 
     public function testInitializes()
     {
         $this->assertInstanceOf(
             LogicAnd::class,
-            new LogicAnd([$this->true])
+            new LogicAnd([$this->true], "error")
         );
     }
 
     public function testValidatesCorrectly()
     {
-        $land = new LogicAnd([$this->true, $this->true]);
+        $land = new LogicAnd([$this->true, $this->true], "error");
         $this->assertTrue(
             $land->validate("ha"),
             "True when all true"
         );
 
-        $land = new LogicAnd([$this->true, $this->false, $this->true]);
+        $land = new LogicAnd([$this->true, $this->false, $this->true], "error");
         $this->assertFalse(
             $land->validate("hi"),
             "False when one false"
@@ -62,7 +68,7 @@ class LogicAndTest extends TestCase
             ->willThrowException(new ValidationException("message"));
 
         $this->expectException(ValidationException::class);
-        $land = new LogicAnd([$assertValid, $assertInvalid]);
+        $land = new LogicAnd([$assertValid, $assertInvalid], "error");
         $land->assert("ho");
     }
 }

@@ -15,14 +15,20 @@ class Type implements RuleInterface
      * @var
      */
     private $type;
+    /**
+     * @var string
+     */
+    private $errorMessage;
 
     /**
      * Type constructor.
      * @param $type
+     * @param string $errorMessage
      */
-    public function __construct($type)
+    public function __construct($type, $errorMessage)
     {
         $this->type = $type;
+        $this->errorMessage = $errorMessage;
     }
 
     /**
@@ -33,12 +39,7 @@ class Type implements RuleInterface
     public function assert($data)
     {
         if (!$this->validate($data)) {
-            throw new ValidationException(sprintf(
-                    "Type %s is not equal to type %s",
-                    gettype($data),
-                    gettype($this->type)
-                )
-            );
+            throw new ValidationException($this->errorMessage);
         }
         return true;
     }
@@ -58,4 +59,11 @@ class Type implements RuleInterface
         return get_class($data) === $this->type;
     }
 
+    /**
+     * @return array
+     */
+    public function getErrorMessages()
+    {
+        return [$this->errorMessage];
+    }
 }

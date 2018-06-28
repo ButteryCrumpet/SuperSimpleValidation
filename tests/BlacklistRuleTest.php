@@ -10,13 +10,13 @@ class BlacklistRuleTest extends TestCase
     {
         $this->assertInstanceOf(
             Blacklist::class,
-            new Blacklist(["hi", "ho"])
+            new Blacklist(["hi", "ho"], "error")
         );
     }
 
     public function testValidatesCorrectly()
     {
-        $bl = new Blacklist(["hi", "ho"]);
+        $bl = new Blacklist(["hi", "ho"], "error");
         $this->assertTrue(
             $bl->validate("ha"),
             "True when value not in blacklist"
@@ -33,7 +33,7 @@ class BlacklistRuleTest extends TestCase
     public function testThrowsExceptionOnAssert()
     {
         $this->expectException(ValidationException::class);
-        $bl = new Blacklist(["ho"]);
+        $bl = new Blacklist(["ho"], "error");
         $bl->assert("ho");
     }
 }

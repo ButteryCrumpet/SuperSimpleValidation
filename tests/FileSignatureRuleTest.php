@@ -12,7 +12,7 @@ class FileSignatureRuleTest extends TestCase
     {
         $this->assertInstanceOf(
             FileSignature::class,
-            new FileSignature(["25", "50", "44", "46"])
+            new FileSignature(["25", "50", "44", "46"], "error")
         );
     }
 
@@ -40,7 +40,7 @@ class FileSignatureRuleTest extends TestCase
             ->method("getStream")
             ->willReturn($stream);
 
-        $fileTest = new FileSignature(["25", "50", "44", "46"]);
+        $fileTest = new FileSignature(["25", "50", "44", "46"], "error");
         $this->assertTrue($fileTest->validate($resource), "Validates resource");
         $this->assertTrue($fileTest->validate($stream), "Validates stream");
         $this->assertTrue($fileTest->validate($uploaded), "Validates uploaded file");
@@ -54,14 +54,14 @@ class FileSignatureRuleTest extends TestCase
             ->method("getStream")
             ->willThrowException(new \RuntimeException());
 
-        $fileTest = new FileSignature(["25", "50", "44", "46"]);
+        $fileTest = new FileSignature(["25", "50", "44", "46"], "error");
         $this->assertFalse($fileTest->validate($uploaded));
     }
 
     public function testThrowsExceptionOnAssert()
     {
         $this->expectException(ValidationException::class);
-        $bl = new FileSignature(["28", "50", "44", "46"]);
+        $bl = new FileSignature(["28", "50", "44", "46"], "error");
         $bl->assert("test.pdf");
     }
 

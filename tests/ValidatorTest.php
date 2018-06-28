@@ -10,7 +10,7 @@ class ValidatorTest extends TestCase
     {
         $this->assertInstanceOf(
             Validator::class,
-            new Validator([],[])
+            new Validator([])
         );
     }
 
@@ -18,8 +18,9 @@ class ValidatorTest extends TestCase
     {
         $rule = $this->createMock(RuleInterface::class);
         $rule->method("validate")->willReturn(true);
+        $rule->method("getErrorMessages")->willReturn(["error"]);
 
-        $validator = new Validator(["test" => $rule], ["test" => "error"]);
+        $validator = new Validator(["test" => $rule]);
         $this->assertTrue(
             $validator->validate("whatever"),
             "Validates properly"
@@ -30,15 +31,16 @@ class ValidatorTest extends TestCase
     {
         $rule = $this->createMock(RuleInterface::class);
         $rule->method("validate")->willReturn(false);
+        $rule->method("getErrorMessages")->willReturn(["error"]);
 
-        $validator = new Validator(["test" => $rule], ["test" => "error"]);
+        $validator = new Validator(["test" => $rule]);
         $this->assertFalse(
             $validator->validate("whatever"),
             "Invalidates properly"
         );
         $this->assertEquals(
-            ["test" => "error"],
-            $validator->getErrors(),
+            ["error"],
+            $validator->getErrorMessages(),
             "Correctly retrieves errors"
         );
     }

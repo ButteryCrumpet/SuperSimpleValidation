@@ -15,14 +15,20 @@ class Blacklist implements RuleInterface
      * @var array
      */
     private $blacklist;
+    /**
+     * @var string
+     */
+    private $errorMessage;
 
     /**
      * Blacklist constructor.
      * @param array $blacklist
+     * @param string $errorMessage
      */
-    public function __construct(array $blacklist)
+    public function __construct(array $blacklist, $errorMessage)
     {
         $this->blacklist = $blacklist;
+        $this->errorMessage = $errorMessage;
     }
 
     /**
@@ -33,9 +39,7 @@ class Blacklist implements RuleInterface
     public function assert($data)
     {
         if (!$this->validate($data)) {
-            throw new ValidationException(
-                sprintf("%s is a blacklisted value", $data)
-            );
+            throw new ValidationException($this->errorMessage);
         }
         return true;
     }
@@ -49,4 +53,11 @@ class Blacklist implements RuleInterface
         return !in_array($data, $this->blacklist);
     }
 
+    /**
+     * @return array
+     */
+    public function getErrorMessages()
+    {
+        return [$this->errorMessage];
+    }
 }

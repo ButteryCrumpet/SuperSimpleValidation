@@ -27,25 +27,25 @@ class LogicXorTest extends TestCase
     {
         $this->assertInstanceOf(
             LogicXor::class,
-            new LogicXor([$this->true])
+            new LogicXor([$this->true], "error")
         );
     }
 
     public function testValidatesCorrectly()
     {
-        $land = new LogicXor([$this->false, $this->false]);
+        $land = new LogicXor([$this->false, $this->false], "error");
         $this->assertFalse(
             $land->validate("ha"),
             "False when none true"
         );
 
-        $land = new LogicXor([$this->false, $this->true, $this->false]);
+        $land = new LogicXor([$this->false, $this->true, $this->false], "error");
         $this->assertTrue(
             $land->validate("hi"),
             "True when one true"
         );
 
-        $land = new LogicXor([$this->false, $this->true, $this->true]);
+        $land = new LogicXor([$this->false, $this->true, $this->true], "error");
         $this->assertFalse(
             $land->validate("hi"),
             "False when more than one true"
@@ -68,7 +68,7 @@ class LogicXorTest extends TestCase
             ->willThrowException(new ValidationException("message"));
 
         $this->expectException(ValidationException::class);
-        $land = new LogicXor([$assertValid, $assertInvalid]);
+        $land = new LogicXor([$assertValid, $assertInvalid], "error");
         $land->assert("ho");
     }
 }

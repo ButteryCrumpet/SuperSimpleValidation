@@ -15,14 +15,20 @@ class Whitelist implements RuleInterface
      * @var array
      */
     private $whitelist;
+    /**
+     * @var string
+     */
+    private $errorMessage;
 
     /**
      * Whitelist constructor.
      * @param array $whitelist
+     * @param string $errorMessage
      */
-    public function __construct(array $whitelist)
+    public function __construct(array $whitelist, $errorMessage)
     {
         $this->whitelist = $whitelist;
+        $this->errorMessage = $errorMessage;
     }
 
     /**
@@ -33,9 +39,7 @@ class Whitelist implements RuleInterface
     public function assert($data)
     {
         if (!$this->validate($data)) {
-            throw new ValidationException(
-                sprintf("%s is not a whitelisted value", $data)
-            );
+            throw new ValidationException($this->errorMessage);
         }
         return true;
     }
@@ -47,6 +51,14 @@ class Whitelist implements RuleInterface
     public function validate($data)
     {
         return in_array($data, $this->whitelist);
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrorMessages()
+    {
+        return [$this->errorMessage];
     }
 
 }

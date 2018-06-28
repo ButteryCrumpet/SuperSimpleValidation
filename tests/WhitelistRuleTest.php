@@ -10,13 +10,13 @@ class WhitelistRuleTest extends TestCase
     {
         $this->assertInstanceOf(
             Whitelist::class,
-            new Whitelist(["hi", "ho"])
+            new Whitelist(["hi", "ho"], "error")
         );
     }
 
     public function testValidatesCorrectly()
     {
-        $wl = new Whitelist(["hi", "ho"]);
+        $wl = new Whitelist(["hi", "ho"], "error");
         $this->assertTrue(
             $wl->validate("hi"),
             "True when value not in whitelist"
@@ -33,7 +33,7 @@ class WhitelistRuleTest extends TestCase
     public function testThrowsExceptionOnAssert()
     {
         $this->expectException("SuperSimpleValidation\ValidationException");
-        $wl = new Whitelist(["hi"]);
+        $wl = new Whitelist(["hi"], "error");
         $wl->assert("ho");
     }
 }

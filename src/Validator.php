@@ -6,31 +6,26 @@ namespace SuperSimpleValidation;
  * Class Validator
  * @package SuperSimpleValidation
  */
-class Validator implements ValidatorInterface
+class Validator implements RuleInterface
 {
     /**
-     * @var array|RuleInterface[]
+     * @var RuleInterface[]
      */
-    private $rules;
+    private $rules = [];
     /**
      * @var array
      */
-    private $messages;
-    /**
-     * @var array
-     */
-    private $errors = [];
+    private $errorMessages = [];
+
 
 
     /**
      * Validator constructor.
      * @param RuleInterface[] $rules
-     * @param array $messages
      */
-    public function __construct(array $rules, array $messages = [])
+    public function __construct(array $rules)
     {
         $this->rules = $rules;
-        $this->messages = $messages;
     }
 
     /**
@@ -42,13 +37,9 @@ class Validator implements ValidatorInterface
         $pass = true;
         foreach ($this->rules as $name => $rule) {
             if (!$rule->validate($data)) {
-                $this->errors[$name] = isset($this->messages[$name])
-                    ? $this->messages[$name]
-                    : sprintf(
-                        "%s invalid for rule %s",
-                        var_export($data, true),
-                        get_class($rule)
-                    );
+                foreach ($rule->getErrorMessages() as $message) {
+                    $this->errorMessages[] = $message;
+                }
                 $pass = false;
             }
             $pass = $pass && true;
@@ -71,9 +62,9 @@ class Validator implements ValidatorInterface
     /**
      * @return array
      */
-    public function getErrors()
+    public function getErrorMessages()
     {
-        return $this->errors;
+        return $this->errorMessages;
     }
 }
 

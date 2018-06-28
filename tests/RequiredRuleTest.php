@@ -10,13 +10,13 @@ class RequiredRuleTest extends TestCase
     {
         $this->assertInstanceOf(
             Required::class,
-            new Required
+            new Required("error")
         );
     }
 
     public function testValidatesCorrectly()
     {
-        $bl = new Required;
+        $bl = new Required("error");
         $this->assertTrue(
             $bl->validate("ha"),
             "True when not empty or null"
@@ -37,7 +37,7 @@ class RequiredRuleTest extends TestCase
     public function testThrowsExceptionOnAssert()
     {
         $this->expectException("SuperSimpleValidation\ValidationException");
-        $bl = new Required;
+        $bl = new Required("error");
         $bl->assert("");
     }
 }

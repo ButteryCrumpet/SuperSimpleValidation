@@ -12,6 +12,20 @@ use SuperSimpleValidation\ValidationException;
 class Required implements RuleInterface
 {
     /**
+     * @var string
+     */
+    private $errorMessage;
+
+    /**
+     * Required constructor.
+     * @param string $errorMessage
+     */
+    public function __construct($errorMessage)
+    {
+        $this->errorMessage = $errorMessage;
+    }
+
+    /**
      * @param $data
      * @throws ValidationException
      * @return bool
@@ -19,9 +33,7 @@ class Required implements RuleInterface
     public function assert($data)
     {
         if (!$this->validate($data)) {
-            throw new ValidationException(
-                "Required value is null or empty"
-            );
+            throw new ValidationException($this->errorMessage);
         }
         return true;
     }
@@ -33,5 +45,13 @@ class Required implements RuleInterface
     public function validate($data)
     {
         return !(is_null($data) || empty($data));
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrorMessages()
+    {
+        return [$this->errorMessage];
     }
 }

@@ -17,14 +17,20 @@ class FileSignature implements RuleInterface
      * @var array
      */
     private $signature;
+    /**
+     * @var string
+     */
+    private $errorMessage;
 
     /**
      * FileType constructor.
      * @param string[] $signature Array of hex values
+     * @param string $errorMessage
      */
-    public function __construct(array $signature)
+    public function __construct(array $signature, $errorMessage)
     {
         $this->signature = $signature;
+        $this->errorMessage = $errorMessage;
     }
 
     /**
@@ -35,12 +41,7 @@ class FileSignature implements RuleInterface
     public function assert($data)
     {
         if (!$this->validate($data)) {
-            throw new ValidationException(
-                sprintf(
-                    "Not valid file format for byte signature %s",
-                    var_export($this->signature, true)
-                )
-            );
+            throw new ValidationException($this->errorMessage);
         }
         return true;
     }
@@ -132,4 +133,13 @@ class FileSignature implements RuleInterface
         }
         return $allPass;
     }
+
+    /**
+     * @return array
+     */
+    public function getErrorMessages()
+    {
+        return [$this->errorMessage];
+    }
+
 }

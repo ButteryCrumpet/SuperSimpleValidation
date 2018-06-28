@@ -6,37 +6,53 @@ use SuperSimpleValidation\RuleInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use SuperSimpleValidation\ValidationException;
 
+/**
+ * Class FileExtension
+ * @package SuperSimpleValidation\Rules
+ */
 class FileExtension implements RuleInterface
 {
+    /**
+     * @var string
+     */
     private $extension;
+    /**
+     * @var string
+     */
+    private $errorMessage;
 
-    public function __construct($extension)
+    /**
+     * FileExtension constructor.
+     * @param string $extension
+     * @param string $errorMessage
+     */
+    public function __construct($extension, $errorMessage)
     {
         if (!is_string($extension)) {
-            throw new \InvalidArgumentException(sprintf(
-                "Extension must be a string. %s was given.",
-                gettype($extension)
-                )
-            );
+            throw new \InvalidArgumentException($this->errorMessage);
         }
 
         $this->extension = ltrim($extension, ".");
+        $this->errorMessage = $errorMessage;
     }
 
+    /**
+     * @param $data
+     * @return bool
+     * @throws ValidationException
+     */
     public function assert($data)
     {
         if (!$this->validate($data)) {
-            throw new ValidationException(
-                sprintf(
-                    "File extension for type %s does not match %s",
-                    gettype($data),
-                    $this->extension
-                )
-            );
+            throw new ValidationException($this->errorMessage);
         }
         return true;
     }
 
+    /**
+     * @param $data
+     * @return bool
+     */
     public function validate($data)
     {
         if (!($data instanceof UploadedFileInterface || is_string($data))) {
@@ -49,5 +65,13 @@ class FileExtension implements RuleInterface
 
         $info = new \SplFileInfo($data);
         return $info->getExtension() === $this->extension;
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrorMessages()
+    {
+        return [$this->errorMessage];
     }
 }

@@ -18,21 +18,21 @@ class Generic implements RuleInterface
     /**
      * @var string
      */
-    private $message;
+    private $errorMessage;
 
     /**
      * Generic constructor.
-     * @param $callable MUST return bool
-     * @param string $message
+     * @param Callable $callable
+     * @param string $errorMessage
      */
-    public function __construct($callable, $message = "Invalid value")
+    public function __construct($callable, $errorMessage)
     {
         if (!\method_exists($callable, '__invoke')) {
             throw new \InvalidArgumentException("Value callable must be a closure or invokable object");
         }
 
         $this->callable = $callable;
-        $this->message = $message;
+        $this->errorMessage = $errorMessage;
     }
 
     /**
@@ -43,7 +43,7 @@ class Generic implements RuleInterface
     public function assert($data)
     {
         if (!$this->validate($data)) {
-            throw new ValidationException($this->message);
+            throw new ValidationException($this->errorMessage);
         }
         return true;
     }
@@ -55,6 +55,14 @@ class Generic implements RuleInterface
     public function validate($data)
     {
         return call_user_func($this->callable, $data);
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrorMessages()
+    {
+        return [$this->errorMessage];
     }
 
 }

@@ -10,7 +10,7 @@ class GenericRuleTest extends TestCase
     {
         $this->assertInstanceOf(
             Generic::class,
-            new Generic(function ($data) { return true; })
+            new Generic(function ($data) { return true; }, "error")
         );
     }
 
@@ -18,7 +18,7 @@ class GenericRuleTest extends TestCase
     {
         $bl = new Generic(function ($data) {
             return $data === "ha";
-        });
+        }, "error");
         $this->assertTrue(
             $bl->validate("ha"),
             "True"
@@ -35,7 +35,7 @@ class GenericRuleTest extends TestCase
     public function testThrowsExceptionOnAssert()
     {
         $this->expectException(ValidationException::class);
-        $bl = new Generic(function ($data) { return false; });
+        $bl = new Generic(function ($data) { return false; }, "error");
         $bl->assert("ho");
     }
 }

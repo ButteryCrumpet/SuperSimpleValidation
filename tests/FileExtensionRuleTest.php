@@ -11,7 +11,7 @@ class FileExtensionRuleTest extends TestCase
     {
         $this->assertInstanceOf(
             FileExtension::class,
-            new FileExtension("pdf")
+            new FileExtension("pdf", "error")
         );
     }
 
@@ -22,7 +22,7 @@ class FileExtensionRuleTest extends TestCase
             ->method("getClientFilename")
             ->willReturn("test.pdf");
 
-        $rule = new FileExtension("pdf");
+        $rule = new FileExtension("pdf", "error");
         $this->assertTrue($rule->validate($uploadFile), "Validates upload file interface");
         $this->assertTrue($rule->validate("test.pdf"), "Validates file name");
         $this->assertFalse($rule->validate(null), "Invalidates correctly");
@@ -31,13 +31,13 @@ class FileExtensionRuleTest extends TestCase
     public function testThrowsExceptionOnIncorrectExtensionArg()
     {
         $this->expectException(\InvalidArgumentException::class);
-        new FileExtension([]);
+        new FileExtension([], "error");
     }
 
     public function testThrowsExceptionOnInvalidAssert()
     {
         $this->expectException(ValidationException::class);
-        $rule = new FileExtension("pdf");
+        $rule = new FileExtension("pdf", "error");
         $rule->assert([]);
     }
 
