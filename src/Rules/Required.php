@@ -2,6 +2,7 @@
 
 namespace SuperSimpleValidation\Rules;
 
+use Psr\Http\Message\UploadedFileInterface;
 use SuperSimpleValidation\RuleInterface;
 use SuperSimpleValidation\ValidationException;
 
@@ -44,6 +45,9 @@ class Required implements RuleInterface
      */
     public function validate($data)
     {
+        if ($data instanceof UploadedFileInterface) {
+            return $data->getError() > 0;
+        }
         return !(is_null($data) || empty($data));
     }
 
