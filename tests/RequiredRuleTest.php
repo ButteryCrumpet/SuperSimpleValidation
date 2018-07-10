@@ -29,6 +29,13 @@ class RequiredRuleTest extends TestCase
             $bl->validate(null),
             "False when null"
         );
+
+        $uploadedFile = $this->createMock(\Psr\Http\Message\UploadedFileInterface::class);
+        $uploadedFile->method("getError")->willReturn(4);
+        $this->assertFalse(
+            $bl->validate($uploadedFile),
+            "False when file upload error"
+        );
     }
 
     /**

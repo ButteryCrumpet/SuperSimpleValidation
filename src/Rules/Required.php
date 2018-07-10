@@ -46,7 +46,7 @@ class Required implements RuleInterface
     public function validate($data)
     {
         if ($data instanceof UploadedFileInterface) {
-            return $data->getError() > 0;
+            return $data->getError() === 0;
         }
         return !(is_null($data) || empty($data));
     }
